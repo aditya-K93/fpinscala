@@ -40,8 +40,8 @@ trait Stream[+A] {
   }
 
   def take(n: Int): Stream[A] = this match {
-    case Cons(h, t) if (n >= 1) => cons(h(), t().take(n - 1))
-    case _                      => empty
+    case Cons(h, t) if n >= 1 => cons(h(), t().take(n - 1))
+    case _                    => empty
   }
 
   def takeViaUnfold(n: Int): Stream[A] =
@@ -51,8 +51,8 @@ trait Stream[+A] {
     }
 
   def drop(n: Int): Stream[A] = this match {
-    case Cons(_, t) if (n >= 1) => t().drop(n - 1)
-    case _                      => this
+    case Cons(_, t) if n >= 1 => t().drop(n - 1)
+    case _                    => this
   }
 
   def takeWhile(p: A => Boolean): Stream[A] = this match {
@@ -120,7 +120,30 @@ trait Stream[+A] {
     zipWithAll(s2)((_, _))
 
   def startsWith[B](s: Stream[B]): Boolean =
-    ???
+    this
+      .zipAll(s)
+      .takeWhile(_._2.isDefined)
+      .forAll { case (s1, s2) =>
+        s1 == s2
+      }
+
+  def tails: Stream[Stream[A]] =
+    unfold(this) {
+      case Empty => None
+      case t     => Some(t, t.drop(1))
+    }.append(Empty)
+
+  def hasSubsequence[B >: A](s: Stream[B]): Boolean =
+    this.tails.exists(_.startsWith(s))
+
+  def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] =
+    this
+      .foldRight((z, Stream(z)))((a, stb) => {
+        lazy val stz = stb
+        val b = f(a, stz._1)
+        (b, cons(b, stz._2))
+      })
+      ._2
 
 }
 case object Empty extends Stream[Nothing]
@@ -182,7 +205,7 @@ object Stream {
 
   def main(args: Array[String]): Unit = {
     val s = Stream(1, 2, 3, 4)
-    val t = Stream(5, 6, 7, 8)
+    val t = Stream(5, 6, 7, 8, 9, 10)
 
     println(s.toList)
     println(s.take(2).toList)
@@ -197,6 +220,10 @@ object Stream {
     println(fromViaUnfold(12).take(3).toList)
     println(constantViaUnfold(12).take(3).toList)
     println(s.takeViaUnfold(2).toList)
+    println(s.zipAll(t).toList)
+    println(s.startsWith(Stream(1, 2, 3)))
+    println(s.hasSubsequence(Stream(3, 4)))
+    println(s.scanRight(0)(_ + _).toList)
   }
 
 }
