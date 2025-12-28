@@ -5,12 +5,6 @@ This repository contains exercises, hints, and answers for the book
 with the book itself, it's the closest you'll get to having your own
 private functional programming tutor without actually having one.
 
-There are two main branches in this repository:
- - [first-edition](https://github.com/fpinscala/fpinscala/tree/first-edition)
- - [second-edition](https://github.com/fpinscala/fpinscala/tree/second-edition)
-
-Be sure to select the branch which matches the edition of the book you are reading!
-
 Here's how to use this repository:
 
 Each chapter in the book develops a fully working library of functions
