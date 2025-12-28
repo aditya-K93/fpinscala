@@ -5,6 +5,9 @@ ThisBuild / scalaVersion := "3.3.4"
 // Enable Scala Native
 enablePlugins(ScalaNativePlugin)
 
+// Add Sonatype snapshots resolver for Scala Native snapshot versions
+ThisBuild / resolvers += "Sonatype Snapshots" at "https://central.sonatype.com/repository/maven-snapshots"
+
 ThisBuild / javacOptions ++= Seq("-source", "21", "-target", "21")
 
 // Ensure generated GitHub Actions install Temurin JDK 21 (needed for Scala 3.3.4 javac options)
