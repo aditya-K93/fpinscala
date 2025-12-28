@@ -102,6 +102,27 @@ will start to pass.
 
 Note: an [SBT](https://www.scala-sbt.org) build is also provided.
 
+### Scala Native
+
+This project supports [Scala Native](https://scala-native.org/) (version 0.5.9), enabling ahead-of-time compilation to native binaries with instant startup time. The project is tested on both JVM and Scala Native in CI.
+
+To compile and test with Scala Native:
+
+    $ sbt test
+
+To create a native executable:
+
+    $ sbt nativeLink
+
+The native binary will be generated at `target/scala-3.3.4/fpinscala`.
+
+**Requirements for Scala Native:**
+- LLVM/Clang 6.0 or newer
+- On macOS: `brew install llvm`
+- On Ubuntu: `sudo apt-get install clang libstdc++-12-dev`
+
+For more information, see the [Scala Native documentation](https://scala-native.org/).
+
 ### License
 
 All code in this repository is
