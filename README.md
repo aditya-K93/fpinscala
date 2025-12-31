@@ -98,15 +98,16 @@ Note: an [SBT](https://www.scala-sbt.org) build is also provided.
 
 ### Scala Native
 
-This project supports [Scala Native](https://scala-native.org/) (version 0.5.10-SNAPSHOT), enabling ahead-of-time compilation to native binaries with instant startup time. The project is tested on both JVM and Scala Native in CI.
+This project supports [Scala Native](https://scala-native.org/) (version 0.5.9), enabling ahead-of-time compilation to native binaries with instant startup time. The project is tested on both JVM and Scala Native in CI.
 
 To compile and test with Scala Native:
 
-    $ sbt test
+    $ sbt fpinscalaNative/compile
+    $ sbt fpinscalaNative/test
 
 To create a native executable:
 
-    $ sbt nativeLink
+    $ sbt fpinscalaNative/nativeLink
 
 The native binary will be generated at `target/scala-3.3.4/fpinscala`.
 
