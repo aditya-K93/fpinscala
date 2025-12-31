@@ -53,7 +53,7 @@ object List: // `List` companion object. Contains functions for creating and wor
     case Cons(_, t) => t
 
   def setHead[A](l: List[A], h: A): List[A] = l match
-    case Nil        => Cons(h, Nil)
+    case Nil        => sys.error("setHead on empty list")
     case Cons(_, t) => Cons(h, t)
 
   def drop[A](l: List[A], n: Int): List[A] =
@@ -68,8 +68,8 @@ object List: // `List` companion object. Contains functions for creating and wor
     case Cons(h, t) => if f(h) then dropWhile(t, f) else l
 
   def init[A](l: List[A]): List[A] = l match
-    case Nil          => Nil
-    case Cons(h, Nil) => Cons(h, Nil)
+    case Nil          => sys.error("init of empty list")
+    case Cons(_, Nil) => Nil
     case Cons(h, t)   => Cons(h, init(t))
 
   def length[A](l: List[A]): Int = foldRight(l, 0, (_, acc) => acc + 1)
@@ -134,6 +134,6 @@ object List: // `List` companion object. Contains functions for creating and wor
 
   @annotation.tailrec
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = sup match
-    case Nil        => sub == Nil
-    case _  if startsWith(sup, sub) => true
-    case Cons(_, t) => hasSubsequence(t, sub)
+    case Nil                       => sub == Nil
+    case _ if startsWith(sup, sub) => true
+    case Cons(_, t)                => hasSubsequence(t, sub)

@@ -61,7 +61,7 @@ jobs:
 
       - name: Test (Scala Native)
         if: matrix.platform == 'native'
-        run: sbt '++ ${{ matrix.scala }}' test
+        run: sbt '++ ${{ matrix.scala }}' nativeTest
 
   publish:
     name: Publish Artifacts

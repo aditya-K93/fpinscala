@@ -3,4 +3,4 @@ resolvers += "Sonatype Snapshots" at "https://central.sonatype.com/repository/ma
 
 addSbtPlugin("com.github.sbt"   % "sbt-github-actions" % "0.29.0")
 addSbtPlugin("org.scalameta"    % "sbt-scalafmt"       % "2.5.6")
-addSbtPlugin("org.scala-native" % "sbt-scala-native"   % "0.5.10-20251217-668cace-SNAPSHOT")
+addSbtPlugin("org.scala-native" % "sbt-scala-native"   % "0.5.9")

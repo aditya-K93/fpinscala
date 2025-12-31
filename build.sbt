@@ -2,12 +2,6 @@ name := "fpinscala"
 
 ThisBuild / scalaVersion := "3.3.4"
 
-// Enable Scala Native
-enablePlugins(ScalaNativePlugin)
-
-// Add Sonatype snapshots resolver for Scala Native snapshot versions
-ThisBuild / resolvers += "Sonatype Snapshots" at "https://central.sonatype.com/repository/maven-snapshots"
-
 ThisBuild / javacOptions ++= Seq("-source", "21", "-target", "21")
 
 // Ensure generated GitHub Actions install Temurin JDK 21 (needed for Scala 3.3.4 javac options)
@@ -32,7 +26,7 @@ ThisBuild / githubWorkflowBuildPreamble := Seq(
 ThisBuild / githubWorkflowBuild := Seq(
   WorkflowStep.Sbt(name = Some("Test"), commands = List("test"), cond = Some("matrix.platform == 'jvm'")),
   WorkflowStep
-    .Sbt(name = Some("Test (Scala Native)"), commands = List("test"), cond = Some("matrix.platform == 'native'"))
+    .Sbt(name = Some("Test (Scala Native)"), commands = List("nativeTest"), cond = Some("matrix.platform == 'native'"))
 )
 
 // Disable artifact upload since we're not publishing from this repo
@@ -43,3 +37,18 @@ ThisBuild / scalacOptions ++= List("-feature", "-deprecation", "-Ykind-projector
 ThisBuild / libraryDependencies += "org.scalameta" %%% "munit" % "1.0.0" % Test
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+// JVM project (default)
+lazy val fpinscala = project.in(file(".")).settings(name := "fpinscala")
+
+// Native project in a subdirectory
+lazy val fpinscalaNative = project.in(file("native")).enablePlugins(ScalaNativePlugin).settings(
+  name                                 := "fpinscala-native",
+  Compile / unmanagedSourceDirectories := (fpinscala / Compile / unmanagedSourceDirectories).value,
+  Test / unmanagedSourceDirectories    := (fpinscala / Test / unmanagedSourceDirectories).value
+)
+
+// `sbt test` runs JVM tests (default)
+// `sbt native` runs Scala Native tests
+addCommandAlias("native", "fpinscalaNative/test")
+addCommandAlias("nativeTest", "fpinscalaNative/test")
