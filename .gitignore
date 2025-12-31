@@ -19,3 +19,5 @@ project/project
 .scala
 .scala-build
 .sbtopts
+src/main/scala/fpinscala/random
+.DS_Store
